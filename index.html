@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Manshi Vatsa — Backend Developer</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --bg: #fafaf8;
+    --surface: #ffffff;
+    --border: #e8e6e0;
+    --text: #1a1916;
+    --muted: #7a7670;
+    --accent: #2a5c45;
+    --accent-light: #e8f0ec;
+    --accent2: #c8873a;
+    --tag-bg: #f2f0eb;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    font-size: 15px;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    background: rgba(250,250,248,0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 2rem;
+    height: 56px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .nav-logo {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.1rem;
+    color: var(--text);
+    text-decoration: none;
+  }
+  .nav-links { display: flex; gap: 2rem; list-style: none; }
+  .nav-links a {
+    text-decoration: none;
+    color: var(--muted);
+    font-size: 0.875rem;
+    font-weight: 500;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--accent); }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    display: flex; align-items: center;
+    padding: 6rem 2rem 4rem;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+  .hero-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; width: 100%; }
+  .hero-label {
+    display: inline-block;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent);
+    background: var(--accent-light);
+    padding: 4px 12px;
+    border-radius: 20px;
+    margin-bottom: 1.25rem;
+  }
+  .hero h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(2.4rem, 5vw, 3.6rem);
+    line-height: 1.1;
+    margin-bottom: 1rem;
+    color: var(--text);
+  }
+  .hero h1 em {
+    font-style: italic;
+    color: var(--accent);
+  }
+  .hero-desc {
+    color: var(--muted);
+    font-size: 1rem;
+    line-height: 1.7;
+    margin-bottom: 2rem;
+    max-width: 440px;
+  }
+  .hero-cta { display: flex; gap: 1rem; flex-wrap: wrap; }
+  .btn-primary {
+    background: var(--accent);
+    color: white;
+    padding: 0.65rem 1.5rem;
+    border-radius: 6px;
+    text-decoration: none;
+    font-size: 0.875rem;
+    font-weight: 500;
+    transition: opacity 0.2s;
+  }
+  .btn-primary:hover { opacity: 0.85; }
+  .btn-secondary {
+    background: transparent;
+    color: var(--text);
+    padding: 0.65rem 1.5rem;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    text-decoration: none;
+    font-size: 0.875rem;
+    font-weight: 500;
+    transition: border-color 0.2s;
+  }
+  .btn-secondary:hover { border-color: var(--accent); color: var(--accent); }
+
+  /* HERO RIGHT — stat cards */
+  .hero-stats { display: flex; flex-direction: column; gap: 1rem; }
+  .stat-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.25rem 1.5rem;
+    display: flex; align-items: center; gap: 1rem;
+    opacity: 0; transform: translateX(20px);
+    animation: slideIn 0.5s forwards;
+  }
+  .stat-card:nth-child(1) { animation-delay: 0.2s; }
+  .stat-card:nth-child(2) { animation-delay: 0.35s; }
+  .stat-card:nth-child(3) { animation-delay: 0.5s; }
+  .stat-card:nth-child(4) { animation-delay: 0.65s; }
+  @keyframes slideIn {
+    to { opacity: 1; transform: translateX(0); }
+  }
+  .stat-icon {
+    width: 40px; height: 40px;
+    background: var(--accent-light);
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.2rem;
+    flex-shrink: 0;
+  }
+  .stat-text strong { display: block; font-size: 0.95rem; font-weight: 600; }
+  .stat-text span { font-size: 0.8rem; color: var(--muted); }
+
+  /* SECTION BASE */
+  section { padding: 5rem 2rem; }
+  .container { max-width: 1100px; margin: 0 auto; }
+  .section-label {
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 0.5rem;
+  }
+  .section-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(1.8rem, 3vw, 2.4rem);
+    margin-bottom: 3rem;
+    line-height: 1.2;
+  }
+
+  /* DIVIDER */
+  .divider { height: 1px; background: var(--border); max-width: 1100px; margin: 0 auto; }
+
+  /* EXPERIENCE */
+  .exp-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+  .exp-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.75rem;
+    position: relative;
+    overflow: hidden;
+    transition: box-shadow 0.2s;
+  }
+  .exp-card:hover { box-shadow: 0 4px 24px rgba(0,0,0,0.07); }
+  .exp-card::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0;
+    height: 3px;
+    background: var(--accent);
+  }
+  .exp-org { font-weight: 700; font-size: 1rem; margin-bottom: 0.2rem; }
+  .exp-role { color: var(--accent); font-size: 0.875rem; font-weight: 500; margin-bottom: 0.25rem; }
+  .exp-date { color: var(--muted); font-size: 0.8rem; margin-bottom: 1rem; }
+  .exp-points { list-style: none; }
+  .exp-points li {
+    font-size: 0.875rem;
+    color: var(--muted);
+    padding-left: 1rem;
+    position: relative;
+    margin-bottom: 0.4rem;
+    line-height: 1.5;
+  }
+  .exp-points li::before {
+    content: '→';
+    position: absolute; left: 0;
+    color: var(--accent);
+    font-size: 0.75rem;
+    top: 1px;
+  }
+
+  /* PROJECTS */
+  .projects-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 1.5rem; }
+  .project-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 1.75rem;
+    display: flex; flex-direction: column;
+    transition: box-shadow 0.25s, transform 0.25s;
+  }
+  .project-card:hover { box-shadow: 0 8px 32px rgba(0,0,0,0.09); transform: translateY(-3px); }
+  .project-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.75rem; }
+  .project-name { font-family: 'DM Serif Display', serif; font-size: 1.2rem; line-height: 1.2; }
+  .project-links { display: flex; gap: 0.5rem; }
+  .project-links a {
+    font-size: 0.75rem;
+    color: var(--muted);
+    text-decoration: none;
+    border: 1px solid var(--border);
+    padding: 3px 9px;
+    border-radius: 4px;
+    transition: all 0.2s;
+  }
+  .project-links a:hover { color: var(--accent); border-color: var(--accent); }
+  .live-badge {
+    display: inline-flex; align-items: center; gap: 4px;
+    font-size: 0.7rem; font-weight: 600;
+    color: #2a7a3a; background: #e6f4ea;
+    padding: 3px 8px; border-radius: 20px;
+    margin-bottom: 0.75rem;
+  }
+  .live-dot { width: 6px; height: 6px; background: #2a7a3a; border-radius: 50%; animation: pulse 1.5s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+  .project-desc { font-size: 0.875rem; color: var(--muted); line-height: 1.6; margin-bottom: 1.25rem; flex: 1; }
+  .project-points { list-style: none; margin-bottom: 1.25rem; }
+  .project-points li { font-size: 0.8rem; color: var(--muted); padding-left: 0.875rem; position: relative; margin-bottom: 0.3rem; }
+  .project-points li::before { content: '·'; position: absolute; left: 0; color: var(--accent); font-weight: 700; }
+  .tags { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+  .tag {
+    font-size: 0.7rem; font-weight: 600;
+    color: var(--muted);
+    background: var(--tag-bg);
+    padding: 3px 9px; border-radius: 4px;
+    letter-spacing: 0.02em;
+  }
+
+  /* SKILLS */
+  .skills-layout { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 1.5rem; }
+  .skill-group {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.5rem;
+  }
+  .skill-group-title {
+    font-size: 0.7rem; font-weight: 700;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--accent); margin-bottom: 1rem;
+  }
+  .skill-pills { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+  .skill-pill {
+    font-size: 0.8rem;
+    color: var(--text);
+    background: var(--tag-bg);
+    padding: 4px 10px; border-radius: 5px;
+    font-weight: 500;
+  }
+
+  /* ACHIEVEMENTS */
+  .achievements-row { display: flex; flex-wrap: wrap; gap: 1rem; }
+  .ach-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.5rem 1.75rem;
+    flex: 1; min-width: 240px;
+    display: flex; align-items: flex-start; gap: 1rem;
+  }
+  .ach-icon { font-size: 1.5rem; }
+  .ach-text strong { display: block; font-size: 0.95rem; font-weight: 600; margin-bottom: 0.2rem; }
+  .ach-text span { font-size: 0.8rem; color: var(--muted); }
+
+  /* EDUCATION */
+  .edu-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.75rem 2rem;
+    display: flex; justify-content: space-between; align-items: center;
+    flex-wrap: wrap; gap: 1rem;
+  }
+  .edu-left strong { font-size: 1.05rem; font-weight: 700; display: block; margin-bottom: 0.25rem; }
+  .edu-left span { font-size: 0.875rem; color: var(--muted); }
+  .edu-right { text-align: right; }
+  .edu-right .cgpa { font-family: 'DM Serif Display', serif; font-size: 1.75rem; color: var(--accent); }
+  .edu-right small { display: block; font-size: 0.75rem; color: var(--muted); }
+
+  /* CONTACT */
+  .contact-section { background: var(--text); color: white; }
+  .contact-section .section-label { color: #7ec8a0; }
+  .contact-section .section-title { color: white; margin-bottom: 1rem; }
+  .contact-desc { color: #a0a09a; font-size: 0.95rem; margin-bottom: 2.5rem; max-width: 480px; }
+  .contact-links { display: flex; flex-wrap: wrap; gap: 1rem; }
+  .contact-link {
+    display: flex; align-items: center; gap: 0.6rem;
+    color: white;
+    text-decoration: none;
+    border: 1px solid #3a3a34;
+    padding: 0.65rem 1.25rem;
+    border-radius: 8px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    transition: border-color 0.2s, background 0.2s;
+  }
+  .contact-link:hover { border-color: #7ec8a0; background: #1f1f1a; }
+  .contact-link svg { width: 16px; height: 16px; }
+
+  /* FOOTER */
+  footer {
+    background: var(--text);
+    border-top: 1px solid #2a2a24;
+    text-align: center;
+    padding: 1.5rem;
+    color: #5a5a54;
+    font-size: 0.8rem;
+  }
+
+  /* HERO ANIMATION */
+  .hero-left { opacity: 0; transform: translateY(20px); animation: fadeUp 0.6s 0.1s forwards; }
+  @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
+
+  /* RESPONSIVE */
+  @media (max-width: 768px) {
+    .hero-inner { grid-template-columns: 1fr; }
+    .hero-stats { flex-direction: row; flex-wrap: wrap; }
+    .stat-card { flex: 1; min-width: 160px; }
+    .exp-grid { grid-template-columns: 1fr; }
+    .nav-links { display: none; }
+    .edu-card { flex-direction: column; }
+    .edu-right { text-align: left; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-logo" href="#">Manshi Vatsa</a>
+  <ul class="nav-links">
+    <li><a href="#experience">Experience</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-inner container" style="max-width:1100px;margin:0 auto;">
+    <div class="hero-left">
+      <span class="hero-label">Backend Developer</span>
+      <h1>Building <em>scalable</em> systems that work in production</h1>
+      <p class="hero-desc">
+        Final-year CS student at Central University of Jharkhand. Specializing in Spring Boot & FastAPI microservices — with live cloud-deployed backends, two research internships, and GATE CS qualified twice.
+      </p>
+      <div class="hero-cta">
+        <a href="#projects" class="btn-primary">View Projects</a>
+        <a href="mailto:manshivatsa@gmail.com" class="btn-secondary">Get in Touch</a>
+      </div>
+    </div>
+    <div class="hero-stats">
+      <div class="stat-card">
+        <div class="stat-icon">🚀</div>
+        <div class="stat-text">
+          <strong>Live Deployments</strong>
+          <span>3 production backends on Render</span>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">🏛️</div>
+        <div class="stat-text">
+          <strong>IIT Patna & NIT Rourkela</strong>
+          <span>Research internships</span>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">📋</div>
+        <div class="stat-text">
+          <strong>GATE CS Qualified</strong>
+          <span>2025 & 2026 — consecutive years</span>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">🎓</div>
+        <div class="stat-text">
+          <strong>CGPA 8.3</strong>
+          <span>B.Tech CSE, CUJ · 2022–2026</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- EXPERIENCE -->
+<section id="experience">
+  <div class="container">
+    <p class="section-label">Experience</p>
+    <h2 class="section-title">Research Internships</h2>
+    <div class="exp-grid">
+      <div class="exp-card">
+        <div class="exp-org">NIT Rourkela</div>
+        <div class="exp-role">Winter Intern</div>
+        <div class="exp-date">January 2025 – February 2025</div>
+        <ul class="exp-points">
+          <li>Built real-time facial recognition system using OpenCV</li>
+          <li>Optimized preprocessing pipelines for edge-case stability</li>
+          <li>Improved detection performance under varied conditions</li>
+        </ul>
+      </div>
+      <div class="exp-card">
+        <div class="exp-org">IIT Patna</div>
+        <div class="exp-role">Summer Intern</div>
+        <div class="exp-date">June 2024 – July 2024</div>
+        <ul class="exp-points">
+          <li>Built NLP preprocessing pipelines for ML dataset quality</li>
+          <li>Structured data cleaning workflows for downstream tasks</li>
+          <li>Enhanced reliability of ML data workflows</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- PROJECTS -->
+<section id="projects">
+  <div class="container">
+    <p class="section-label">Projects</p>
+    <h2 class="section-title">What I've built</h2>
+    <div class="projects-grid">
+
+      <!-- Project 1 -->
+      <div class="project-card">
+        <div class="project-top">
+          <div class="project-name">AI Business Analyst System</div>
+          <div class="project-links">
+            <a href="https://github.com" target="_blank">GitHub</a>
+          </div>
+        </div>
+        <div class="live-badge"><span class="live-dot"></span> Live Backend</div>
+        <p class="project-desc">Full-stack AI analytics platform with microservices architecture — multi-agent AI system for natural language query processing and automated analytics.</p>
+        <ul class="project-points">
+          <li>Independent Spring Boot + FastAPI microservices on Render</li>
+          <li>Multi-agent AI for NLP query and automated analytics</li>
+          <li>Android client with real-time AI backend integration</li>
+          <li>JWT auth, Docker containerization, cross-service communication</li>
+        </ul>
+        <div class="tags">
+          <span class="tag">Java</span>
+          <span class="tag">Spring Boot</span>
+          <span class="tag">FastAPI</span>
+          <span class="tag">Python</span>
+          <span class="tag">MySQL</span>
+          <span class="tag">Docker</span>
+          <span class="tag">Kotlin</span>
+        </div>
+      </div>
+
+      <!-- Project 2 -->
+      <div class="project-card">
+        <div class="project-top">
+          <div class="project-name">QueueEase</div>
+          <div class="project-links">
+            <a href="https://queueease-backend-1.onrender.com/swagger-ui/index.html" target="_blank">Live</a>
+            <a href="https://github.com" target="_blank">GitHub</a>
+          </div>
+        </div>
+        <div class="live-badge"><span class="live-dot"></span> Live API</div>
+        <p class="project-desc">Smart queue management system with remote queue joining, real-time tracking, and role-based access control via JWT authentication.</p>
+        <ul class="project-points">
+          <li>Hybrid DB — MySQL for transactions, MongoDB for analytics</li>
+          <li>Role-based JWT authentication and access control</li>
+          <li>Swagger API documentation, deployed on Render</li>
+          <li>Scalable remote queue joining + real-time tracking</li>
+        </ul>
+        <div class="tags">
+          <span class="tag">Java</span>
+          <span class="tag">Spring Boot</span>
+          <span class="tag">MySQL</span>
+          <span class="tag">MongoDB</span>
+          <span class="tag">JWT</span>
+          <span class="tag">Kotlin</span>
+        </div>
+      </div>
+
+      <!-- Project 3 -->
+      <div class="project-card">
+        <div class="project-top">
+          <div class="project-name">Finance Backend System</div>
+          <div class="project-links">
+            <a href="https://github.com" target="_blank">GitHub</a>
+          </div>
+        </div>
+        <p class="project-desc">Secure RESTful backend for financial operations with robust authentication, validation, and global exception handling.</p>
+        <ul class="project-points">
+          <li>Spring Security + JWT authentication</li>
+          <li>Robust business logic and input validation</li>
+          <li>Global exception handling and error responses</li>
+        </ul>
+        <div class="tags">
+          <span class="tag">Java</span>
+          <span class="tag">Spring Boot</span>
+          <span class="tag">MySQL</span>
+          <span class="tag">Spring Security</span>
+        </div>
+      </div>
+
+      <!-- Project 4 -->
+      <div class="project-card">
+        <div class="project-top">
+          <div class="project-name">Facial Emotion Recognition</div>
+          <div class="project-links">
+            <a href="https://github.com" target="_blank">GitHub</a>
+          </div>
+        </div>
+        <p class="project-desc">Real-time emotion detection system using computer vision — built during NIT Rourkela research internship.</p>
+        <ul class="project-points">
+          <li>Real-time face detection with OpenCV</li>
+          <li>Optimized preprocessing pipeline</li>
+          <li>Edge-case handling for stable detection</li>
+        </ul>
+        <div class="tags">
+          <span class="tag">Python</span>
+          <span class="tag">OpenCV</span>
+          <span class="tag">Computer Vision</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- SKILLS -->
+<section id="skills">
+  <div class="container">
+    <p class="section-label">Skills</p>
+    <h2 class="section-title">Technical Toolkit</h2>
+    <div class="skills-layout">
+      <div class="skill-group">
+        <div class="skill-group-title">Languages</div>
+        <div class="skill-pills">
+          <span class="skill-pill">Java</span>
+          <span class="skill-pill">Python</span>
+          <span class="skill-pill">Kotlin</span>
+          <span class="skill-pill">C</span>
+        </div>
+      </div>
+      <div class="skill-group">
+        <div class="skill-group-title">Backend</div>
+        <div class="skill-pills">
+          <span class="skill-pill">Spring Boot</span>
+          <span class="skill-pill">FastAPI</span>
+          <span class="skill-pill">REST APIs</span>
+          <span class="skill-pill">JWT Auth</span>
+          <span class="skill-pill">Microservices</span>
+        </div>
+      </div>
+      <div class="skill-group">
+        <div class="skill-group-title">Databases</div>
+        <div class="skill-pills">
+          <span class="skill-pill">MySQL</span>
+          <span class="skill-pill">MongoDB</span>
+        </div>
+      </div>
+      <div class="skill-group">
+        <div class="skill-group-title">AI / ML</div>
+        <div class="skill-pills">
+          <span class="skill-pill">NLP Basics</span>
+          <span class="skill-pill">Multi-Agent AI</span>
+          <span class="skill-pill">RAG Concepts</span>
+          <span class="skill-pill">Pandas</span>
+          <span class="skill-pill">NumPy</span>
+        </div>
+      </div>
+      <div class="skill-group">
+        <div class="skill-group-title">Tools & Deployment</div>
+        <div class="skill-pills">
+          <span class="skill-pill">Docker</span>
+          <span class="skill-pill">Git</span>
+          <span class="skill-pill">Postman</span>
+          <span class="skill-pill">Swagger</span>
+          <span class="skill-pill">Render</span>
+          <span class="skill-pill">Railway</span>
+        </div>
+      </div>
+      <div class="skill-group">
+        <div class="skill-group-title">Core CS</div>
+        <div class="skill-pills">
+          <span class="skill-pill">DSA</span>
+          <span class="skill-pill">OOP</span>
+          <span class="skill-pill">System Design</span>
+          <span class="skill-pill">Problem Solving</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ACHIEVEMENTS -->
+<section id="achievements">
+  <div class="container">
+    <p class="section-label">Achievements</p>
+    <h2 class="section-title">Recognition & Leadership</h2>
+    <div class="achievements-row">
+      <div class="ach-card">
+        <div class="ach-icon">🏆</div>
+        <div class="ach-text">
+          <strong>GATE CS/IT Qualified</strong>
+          <span>Qualified in both 2025 and 2026 — consecutive years</span>
+        </div>
+      </div>
+      <div class="ach-card">
+        <div class="ach-icon">📄</div>
+        <div class="ach-text">
+          <strong>Research Paper</strong>
+          <span>Presented on AI/ML in Network Security</span>
+        </div>
+      </div>
+      <div class="ach-card">
+        <div class="ach-icon">💻</div>
+        <div class="ach-text">
+          <strong>Hackathon Team Lead</strong>
+          <span>RVCST 2025 — Built AI analytics dashboard in 24 hrs</span>
+        </div>
+      </div>
+      <div class="ach-card">
+        <div class="ach-icon">🎙️</div>
+        <div class="ach-text">
+          <strong>Technical Secretary, CSI</strong>
+          <span>Organized 3 workshops with 200+ participants</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- EDUCATION -->
+<section id="education">
+  <div class="container">
+    <p class="section-label">Education</p>
+    <h2 class="section-title">Academic Background</h2>
+    <div class="edu-card">
+      <div class="edu-left">
+        <strong>Central University of Jharkhand</strong>
+        <span>B.Tech in Computer Science and Engineering · 2022 – 2026</span>
+      </div>
+      <div class="edu-right">
+        <div class="cgpa">8.3</div>
+        <small>CGPA (till 3rd Year)</small>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact" class="contact-section">
+  <div class="container">
+    <p class="section-label">Contact</p>
+    <h2 class="section-title">Let's work together</h2>
+    <p class="contact-desc">Open to backend developer roles, internships, and interesting problems to solve. Feel free to reach out.</p>
+    <div class="contact-links">
+      <a href="mailto:manshivatsa@gmail.com" class="contact-link">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+        manshivatsa@gmail.com
+      </a>
+      <a href="https://linkedin.com" target="_blank" class="contact-link">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+        LinkedIn
+      </a>
+      <a href="https://github.com" target="_blank" class="contact-link">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+        GitHub
+      </a>
+      <a href="tel:+918709533579" class="contact-link">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.42 2 2 0 0 1 3.6 1.27h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.91a16 16 0 0 0 6 6l.92-.92a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 21.73 16.92z"/></svg>
+        +91-8709533579
+      </a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  © 2025 Manshi Vatsa · Built with care · Ranchi, Jharkhand
+</footer>
+
+</body>
+</html>
